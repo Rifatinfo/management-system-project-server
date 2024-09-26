@@ -53,6 +53,30 @@ async function run() {
       res.send(user);
     })
 
+    app.put('/users/:id', async (req, res) => {
+      const id = req.params.id;
+      const user = req.body;
+      console.log(user);
+    
+      const filter = { _id: new ObjectId(id) };
+      const option = { upsert: true }; // Create the document if it doesn't exist
+    
+      const updatedUser = {
+        $set: {
+          name: user.name,
+          email: user.email,
+          male: user.male,
+          female: user.female,
+          active: user.active,
+          inactive: user.inactive
+        }
+      };
+    
+      const result = await userCollection.updateOne(filter, updatedUser, option);
+      res.send(result);
+    });
+    
+
     app.delete('/users/:id', async (req, res) => {
       const id = req.params.id;
       console.log('Please delete from database', id);
