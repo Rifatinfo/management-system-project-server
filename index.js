@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express')
 const cors = require('cors');
 const app = express();
@@ -45,6 +45,14 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     })
+
+    app.delete('/users/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log('Please delete from database', id);
+      const query = { _id: new ObjectId(id) };
+      const result = await userCollection.deleteOne(query); 
+      res.send(result);  
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
